@@ -45,7 +45,7 @@ pipeline {
                     def config = readYaml file: "train-schedule-kube-canary.yml"
                     config[1].spec.replicas = Integer.parseInt(env.CANARY_REPLICAS)
                     config[1].spec.template.spec.containers[0].image = env.DOCKER_IMAGE_NAME
-                    writeYaml file: "train-schedule-kube-canary.yml", data: config, overwrite: true
+                    writeYaml file: "train-schedule-kube-canary.yml", datas: config, overwrite: true
                 }
                 withKubeConfig([credentialsId: 'kubeconfig']) {
                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.22.15/bin/linux/amd64/kubectl"'
