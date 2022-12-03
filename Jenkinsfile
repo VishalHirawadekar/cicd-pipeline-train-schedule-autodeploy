@@ -41,7 +41,7 @@ pipeline {
                 CANARY_REPLICAS = 1
             }
             steps {
-                script{
+                script {
                     def config = readYaml file: "train-schedule-kube-canary.yml"
                     config[1].spec.replicas = Integer.parseInt(env.CANARY_REPLICAS)
                     config[1].spec.template.spec.containers[0].image = env.DOCKER_IMAGE_NAME
@@ -58,7 +58,8 @@ pipeline {
             environment { 
                 CANARY_REPLICAS = 0
             }
-            script{
+            steps {
+            script {
                 def config = readYaml file: "train-schedule-kube-canary.yml"
                 config[1].spec.replicas = Integer.parseInt(env.CANARY_REPLICAS)
                 config[1].spec.template.spec.containers[0].image = env.DOCKER_IMAGE_NAME
@@ -72,6 +73,7 @@ pipeline {
                    sh 'chmod u+x ./kubectl'
                    sh './kubectl apply -f train-schedule-kube.yml'
                }
+            }
         }
     }
 }
