@@ -58,18 +58,20 @@ pipeline {
             environment { 
                 CANARY_REPLICAS = 0
             }
-            steps {
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube.yml',
-                    enableConfigSubstitution: true
-                )
-            }
+            script{
+                def config = readYaml file: "train-schedule-kube-canary.yml"
+                config[1].spec.replicas = Integer.parseInt(env.CANARY_REPLICAS)
+                config[1].spec.template.spec.containers[0].image = env.DOCKER_IMAGE_NAME
+                writeYaml file: "train-schedule-kube-canary.yml", datas: config, overwrite: true
+                def configProd = readYaml file: "train-schedule-kube.yml"
+                configProd[1].spec.template.spec.containers[0].image = env.DOCKER_IMAGE_NAME
+                writeYaml file: "train-schedule-kube.yml", datas: configProd, overwrite: true
+                }
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                   sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.22.15/bin/linux/amd64/kubectl"'
+                   sh 'chmod u+x ./kubectl'
+                   sh './kubectl apply -f train-schedule-kube.yml'
+               }
         }
     }
 }
