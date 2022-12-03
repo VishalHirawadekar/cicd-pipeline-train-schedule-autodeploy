@@ -44,7 +44,7 @@ pipeline {
                 script {
                     def config = readYaml file: "train-schedule-kube-canary.yml"
                     config[1].spec.replicas = Integer.parseInt(env.CANARY_REPLICAS)
-                    config[1].spec.template.spec.containers[0].image = "${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}'
+                    config[1].spec.template.spec.containers[0].image = "${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}"
                     writeYaml file: "train-schedule-kube-canary.yml", datas: config, overwrite: true
                 }
                 withKubeConfig([credentialsId: 'kubeconfig']) {
@@ -65,7 +65,7 @@ pipeline {
                 config[1].spec.template.spec.containers[0].image = env.DOCKER_IMAGE_NAME
                 writeYaml file: "train-schedule-kube-canary.yml", datas: config, overwrite: true
                 def configProd = readYaml file: "train-schedule-kube.yml"
-                configProd[1].spec.template.spec.containers[0].image = "${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}'
+                configProd[1].spec.template.spec.containers[0].image = "${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}"
                 writeYaml file: "train-schedule-kube.yml", datas: configProd, overwrite: true
                 }
                 withKubeConfig([credentialsId: 'kubeconfig']) {
