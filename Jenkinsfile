@@ -43,6 +43,7 @@ pipeline {
             steps {
                 script{
                     def config = readYaml file: "train-schedule-kube-canary.yml"
+                    echo config 
                     config.spec.replicas = env.CANARY_REPLICAS
                     writeYaml file: "train-schedule-kube-canary.yml", data: config
                 }
