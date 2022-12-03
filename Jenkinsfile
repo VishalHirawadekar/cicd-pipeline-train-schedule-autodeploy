@@ -44,7 +44,7 @@ pipeline {
                 script{
                     def config = readYaml file: "train-schedule-kube-canary.yml"
                     config[1].spec.replicas = env.CANARY_REPLICAS
-                    writeYaml file: "train-schedule-kube-canary.yml", data: config
+                    writeYaml file: "train-schedule-kube-canary.yml", data: config, overwrite: true
                 }
                 withKubeConfig([credentialsId: 'kubeconfig']) {
                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.22.15/bin/linux/amd64/kubectl"'
