@@ -1,6 +1,8 @@
 pipeline {
     agent {
-        "build-slave"
+        node {
+            label 'build-slave'
+        }
     }
     environment {
         //be sure to replace "bhavukm" with your own Docker Hub username
