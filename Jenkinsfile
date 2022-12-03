@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script{
                     def config = readYaml file: "train-schedule-kube-canary.yml"
-                    config[1].spec.replicas = parseInt(env.CANARY_REPLICAS)
+                    config[1].spec.replicas = Integer.parseInt(env.CANARY_REPLICAS)
                     config[1].spec.template.spec.containers[0].image = env.DOCKER_IMAGE_NAME
                     writeYaml file: "train-schedule-kube-canary.yml", data: config, overwrite: true
                 }
