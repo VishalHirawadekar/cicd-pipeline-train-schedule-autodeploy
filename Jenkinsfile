@@ -54,10 +54,11 @@ pipeline {
             }
             steps {
                 script {
-                    def USER_INPUT = input 'Deploy to Production?'
-                    echo "${USER_INPUT}"
+                    def confirmation = input(
+                        id: 'confirmation',
+                        message: 'Deploy to Production?'
+                        )
                 }
-                echo "${USER_INPUT}"
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
                     configs: 'train-schedule-kube-canary.yml',
