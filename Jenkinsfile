@@ -69,8 +69,6 @@ pipeline {
                 writeYaml file: "train-schedule-kube.yml", datas: configProd, overwrite: true
                 }
                 withKubeConfig([credentialsId: 'kubeconfig']) {
-                   sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.22.15/bin/linux/amd64/kubectl"'
-                   sh 'chmod u+x ./kubectl'
                    sh './kubectl apply -f train-schedule-kube.yml'
                }
             }
