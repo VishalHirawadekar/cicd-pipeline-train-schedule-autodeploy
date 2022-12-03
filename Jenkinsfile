@@ -43,8 +43,7 @@ pipeline {
             steps {
                 script{
                     def config = readYaml file: "train-schedule-kube-canary.yml"
-                    echo config 
-                    config.spec.replicas = env.CANARY_REPLICAS
+                    config[1].spec.replicas = env.CANARY_REPLICAS
                     writeYaml file: "train-schedule-kube-canary.yml", data: config
                 }
                 withKubeConfig([credentialsId: 'kubeconfig']) {
