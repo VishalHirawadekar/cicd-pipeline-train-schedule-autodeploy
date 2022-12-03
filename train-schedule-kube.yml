@@ -45,3 +45,18 @@ spec:
         resources:
           requests:
             cpu: 200m
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: train-schedule-deployment
+  labels:
+    app: train-schedule
+spec:
+  maxReplicas: 5
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: train-schedule-deployment
+  targetCPUUtilizationPercentage: 50
