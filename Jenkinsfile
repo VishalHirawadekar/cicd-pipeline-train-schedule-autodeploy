@@ -44,7 +44,7 @@ pipeline {
                 withKubeConfig([credentialsId: 'kubeconfig']) {
                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.22.15/bin/linux/amd64/kubectl"'
                    sh 'chmod u+x ./kubectl'
-                   sh "sed -i 's/$CANARY_REPLICAS/${CANARY_REPLICAS}/g' train-schedule-kube-canary.yml;sed -i 's/$DOCKER_IMAGE_NAME/${DOCKER_IMAGE_NAME}/g' train-schedule-kube-canary.yml"
+                   sh 'sed -i "s/$CANARY_REPLICAS/${CANARY_REPLICAS}/g" train-schedule-kube-canary.yml;sed -i "s/$DOCKER_IMAGE_NAME/${DOCKER_IMAGE_NAME}/g" train-schedule-kube-canary.yml'
                    sh './kubectl apply -f train-schedule-kube-canary.yml'
                }
             }
