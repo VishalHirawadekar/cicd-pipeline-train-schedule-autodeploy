@@ -40,10 +40,12 @@ pipeline {
             environment { 
                 CANARY_REPLICAS = 1
             }
-            def config = readYaml file: "train-schedule-kube-canary.yml"
-            config.spec.replicas = env.CANARY_REPLICAS
-            writeYaml file: "train-schedule-kube-canary.yml", data: config
             steps {
+                script{
+                    def config = readYaml file: "train-schedule-kube-canary.yml"
+                    config.spec.replicas = env.CANARY_REPLICAS
+                    writeYaml file: "train-schedule-kube-canary.yml", data: config
+                }
                 withKubeConfig([credentialsId: 'kubeconfig']) {
                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.22.15/bin/linux/amd64/kubectl"'
                    sh 'chmod u+x ./kubectl'
