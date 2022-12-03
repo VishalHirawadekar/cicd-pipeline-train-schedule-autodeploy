@@ -53,8 +53,8 @@ pipeline {
                 CANARY_REPLICAS = 0
             }
             steps {
-                input 'Deploy to Production?'
-                milestone(1)
+                def USER_INPUT = input 'Deploy to Production?'
+                echo "${USER_INPUT}"
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
                     configs: 'train-schedule-kube-canary.yml',
