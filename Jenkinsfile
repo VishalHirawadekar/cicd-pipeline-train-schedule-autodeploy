@@ -53,7 +53,10 @@ pipeline {
                 CANARY_REPLICAS = 0
             }
             steps {
-                def USER_INPUT = input 'Deploy to Production?'
+                script {
+                    def USER_INPUT = input 'Deploy to Production?'
+                    echo "${USER_INPUT}"
+                }
                 echo "${USER_INPUT}"
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
