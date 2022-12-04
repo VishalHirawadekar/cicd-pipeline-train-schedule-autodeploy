@@ -3,13 +3,12 @@ apiVersion: v1
 metadata:
   name: train-schedule-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: train-schedule
   ports:
   - protocol: TCP
     port: 8080
-    nodePort: 8080
 
 ---
 
@@ -46,3 +45,18 @@ spec:
         resources:
           requests:
             cpu: 200m
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: train-schedule-deployment
+  labels:
+    app: train-schedule
+spec:
+  maxReplicas: 5
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: train-schedule-deployment
+  targetCPUUtilizationPercentage: 50
